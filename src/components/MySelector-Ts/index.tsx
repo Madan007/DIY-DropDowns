@@ -7,7 +7,7 @@ import '@blueprintjs/icons/lib/css/blueprint-icons.css';
 import '@blueprintjs/select/lib/css/blueprint-select.css';
 import './App.css';
 
-import { SelectExample } from './components/MySelector-Ts/SelectExample';
+import { SelectExample } from './SelectExample';
 
 const App = () => (
   <div>

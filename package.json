@@ -8,16 +8,21 @@
     "@blueprintjs/icons": "3.10.0",
     "@blueprintjs/select": "3.10.0",
     "@types/jest": "^25.2.3",
+    "babel": "^6.23.0",
+    "babel-plugin-transform-react-createelement-to-jsx": "^1.1.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-scripts": "1.1.1",
     "react-scripts-ts": "^3.1.0",
     "react-transition-group": "^2.2.1",
+    "styled-components": "^5.1.0",
     "typescript": "^3.9.3"
   },
   "devDependencies": {
     "@types/react": "16.8.3",
-    "@types/react-dom": "16.0.6"
+    "@types/react-dom": "16.0.6",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-styled-components": "^1.10.7"
   },
   "scripts": {
     "start": "react-scripts start",

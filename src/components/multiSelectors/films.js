@@ -107,28 +107,33 @@ export const TOP_100_FILMS = [
   { title: '3 Idiots', year: 2009 },
   { title: 'Monty Python and the Holy Grail', year: 1975 },
 ].map((m, index) => Object.assign(Object.assign({}, m), { rank: index + 1 }));
+
 export const renderFilm = (film, { handleClick, modifiers, query }) => {
   if (!modifiers.matchesPredicate) {
     return null;
   }
   const text = `${film.rank}. ${film.title}`;
-  return React.createElement(MenuItem, {
-    active: modifiers.active,
-    disabled: modifiers.disabled,
-    label: film.year.toString(),
-    key: film.rank,
-    onClick: handleClick,
-    text: highlightText(text, query),
-  });
+
+  return (
+    <MenuItem
+      active={modifiers.active}
+      disabled={modifiers.disabled}
+      label={film.year.toString()}
+      key={film.rank}
+      onClick={handleClick}
+      text={highlightText(text, query)}
+    />
+  );
 };
-export const renderCreateFilmOption = (query, active, handleClick) =>
-  React.createElement(MenuItem, {
-    icon: 'add',
-    text: `Create "${query}"`,
-    active: active,
-    onClick: handleClick,
-    shouldDismissPopover: false,
-  });
+export const renderCreateFilmOption = (query, active, handleClick) => (
+  <MenuItem
+    icon="add"
+    text={`Create "${query}"`}
+    active={active}
+    onClick={handleClick}
+    shouldDismissPopover={false}
+  />
+);
 export const filterFilm = (query, film, _index, exactMatch) => {
   const normalizedTitle = film.title.toLowerCase();
   const normalizedQuery = query.toLowerCase();
@@ -164,7 +169,7 @@ function highlightText(text, query) {
       tokens.push(before);
     }
     lastIndex = regexp.lastIndex;
-    tokens.push(React.createElement('strong', { key: lastIndex }, match[0]));
+    tokens.push(<strong key={lastIndex}>{match[0]}</strong>);
   }
   const rest = text.slice(lastIndex);
   if (rest.length > 0) {

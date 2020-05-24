@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Button, Intent, MenuItem, Switch } from '@blueprintjs/core';
+import { Button, MenuItem } from '@blueprintjs/core';
 // import { Example } from '@blueprintjs/docs-theme';
-import { Example } from './Example';
+import Continer from './Container';
 import { MultiSelect } from '@blueprintjs/select';
+import styled from 'styled-components';
 import {
   areFilmsEqual,
   arrayContainsFilm,
@@ -13,14 +14,7 @@ import {
   renderCreateFilmOption,
   TOP_100_FILMS,
 } from './films';
-const FilmMultiSelect = MultiSelect.ofType();
-const INTENTS = [
-  Intent.NONE,
-  Intent.PRIMARY,
-  Intent.SUCCESS,
-  Intent.DANGER,
-  Intent.WARNING,
-];
+
 export default class MyMultiSelector extends React.PureComponent {
   constructor() {
     super(...arguments);
@@ -31,27 +25,34 @@ export default class MyMultiSelector extends React.PureComponent {
       films: [],
       hasInitialContent: false,
       intent: false,
-      items: filmSelectProps.items,
+      items: [],
       openOnKeyDown: false,
       popoverMinimal: true,
       resetOnSelect: true,
       tagMinimal: false,
     };
     this.renderTag = (film) => film.title;
+
     // NOTE: not using Films.itemRenderer here so we can set icons.
     this.renderFilm = (film, { modifiers, handleClick }) => {
       if (!modifiers.matchesPredicate) {
         return null;
       }
-      return React.createElement(MenuItem, {
-        active: modifiers.active,
-        icon: this.isFilmSelected(film) ? 'tick' : 'blank',
-        key: film.rank,
-        label: film.year.toString(),
-        onClick: handleClick,
-        text: `${film.rank}. ${film.title}`,
-        shouldDismissPopover: false,
-      });
+      const CustomizeMenuItem = styled(MenuItem)`
+        ${this.props.menuitemsprops || ''}
+      `;
+
+      return (
+        <CustomizeMenuItem
+          active={modifiers.active}
+          icon={this.isFilmSelected(film) ? 'tick' : 'blank'}
+          key={film.rank}
+          label={film.year.toString()}
+          onClick={handleClick}
+          text={`${film.rank}. ${film.title}`}
+          shouldDismissPopover={false}
+        ></CustomizeMenuItem>
+      );
     };
     this.handleTagRemove = (_tag, index) => {
       this.deselectFilm(index);
@@ -70,15 +71,23 @@ export default class MyMultiSelector extends React.PureComponent {
     };
     this.handleClear = () => this.setState({ films: [] });
   }
+
+  componentDidMount() {
+    this.setState({ items: filmSelectProps.items });
+  }
+
   getSelectedFilmIndex(film) {
     return this.state.films.indexOf(film);
   }
+
   isFilmSelected(film) {
     return this.getSelectedFilmIndex(film) !== -1;
   }
+
   selectFilm(film) {
     this.selectFilms([film]);
   }
+
   selectFilms(filmsToSelect) {
     const { createdItems, films, items } = this.state;
     let nextCreatedItems = createdItems.slice();
@@ -105,6 +114,7 @@ export default class MyMultiSelector extends React.PureComponent {
       items: nextItems,
     });
   }
+
   deselectFilm(index) {
     const { films } = this.state;
     const film = films[index];
@@ -126,53 +136,67 @@ export default class MyMultiSelector extends React.PureComponent {
 
   render() {
     let { allowCreate, films, popoverMinimal } = this.state;
-    const initialContent = this.state.hasInitialContent
-      ? React.createElement(MenuItem, {
-          disabled: true,
-          text: `${TOP_100_FILMS.length} items loaded.`,
-        }) // explicit undefined (not null) for default behavior (show full list)
-      : undefined;
+
+    const CustomizeMenuItem = styled(MenuItem)`
+      ${this.props.menuitemsprops || ''}
+    `;
+
+    const InputTagWrapper = styled.div`
+      .bp3-tag-input-values {
+        .bp3-tag {
+          ${this.props.tagprops || ''}
+        }
+        .bp3-input-ghost {
+          ${this.props.searchprops || ''}
+        }
+      }
+    `;
+
+    const initialContent = this.state.hasInitialContent ? (
+      <CustomizeMenuItem
+        disabled={true}
+        text={`${TOP_100_FILMS.length} items loaded.`}
+      >
+        })/>
+      </CustomizeMenuItem>
+    ) : undefined;
     const maybeCreateNewItemFromQuery = allowCreate ? createFilm : undefined;
     const maybeCreateNewItemRenderer = allowCreate
       ? renderCreateFilmOption
       : null;
     const clearButton =
-      films.length > 0
-        ? React.createElement(Button, {
-            icon: 'cross',
-            minimal: true,
-            onClick: this.handleClear,
-          })
-        : undefined;
-    return React.createElement(
-      Example,
-      Object.assign({}, this.props),
-      React.createElement(
-        FilmMultiSelect,
-        Object.assign({}, filmSelectProps, {
-          createNewItemFromQuery: maybeCreateNewItemFromQuery,
-          createNewItemRenderer: maybeCreateNewItemRenderer,
-          initialContent: initialContent,
-          itemRenderer: this.renderFilm,
-          itemsEqual: areFilmsEqual,
-          // we may customize the default filmSelectProps.items by
-          // adding newly created items to the list, so pass our own
-          items: this.state.items,
-          noResults: React.createElement(MenuItem, {
-            disabled: true,
-            text: 'No results.',
-          }),
-          onItemSelect: this.handleFilmSelect,
-          onItemsPaste: this.handleFilmsPaste,
-          popoverProps: { minimal: popoverMinimal },
-          tagRenderer: this.renderTag,
-          tagInputProps: {
-            onRemove: this.handleTagRemove,
-            rightElement: clearButton,
-          },
-          selectedItems: this.state.films,
-        })
-      )
+      films.length > 0 ? (
+        <Button icon="cross" minimal={true} onClick={this.handleClear}></Button>
+      ) : undefined;
+    return (
+      <InputTagWrapper>
+        <Continer {...Object.assign({}, this.props)}>
+          <MultiSelect
+            {...Object.assign({}, filmSelectProps, {
+              createNewItemFromQuery: maybeCreateNewItemFromQuery,
+              createNewItemRenderer: maybeCreateNewItemRenderer,
+              initialContent,
+              itemRenderer: this.renderFilm,
+              itemsEqual: areFilmsEqual,
+              // we may customize the default filmSelectProps.items by
+              // adding newly created items to the list, so pass our own
+              items: this.state.items,
+              noResults: (
+                <CustomizeMenuItem disabled={true} text="No results." />
+              ),
+              onItemSelect: this.handleFilmSelect,
+              onItemsPaste: this.handleFilmsPaste,
+              popoverProps: { minimal: popoverMinimal },
+              tagRenderer: this.renderTag,
+              tagInputProps: {
+                onRemove: this.handleTagRemove,
+                rightElement: clearButton,
+              },
+              selectedItems: this.state.films,
+            })}
+          />
+        </Continer>
+      </InputTagWrapper>
     );
   }
 }

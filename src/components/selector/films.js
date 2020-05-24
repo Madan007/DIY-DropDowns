@@ -1,5 +1,6 @@
 import { MenuItem } from '@blueprintjs/core';
 import * as React from 'react';
+import styled from 'styled-components';
 /** Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top */
 export const TOP_100_FILMS = [
   { title: 'The Shawshank Redemption', year: 1994 },
@@ -112,7 +113,11 @@ export const renderFilm = (film, { handleClick, modifiers, query }) => {
     return null;
   }
   const text = `${film.rank}. ${film.title}`;
-  return React.createElement(MenuItem, {
+  const customProperties = `color: green; font-size: 20px; background-color: red`;
+  const CustomizeMenuItem = styled(MenuItem)`
+    ${customProperties}
+  `;
+  return React.createElement(CustomizeMenuItem, {
     active: modifiers.active,
     disabled: modifiers.disabled,
     label: film.year.toString(),

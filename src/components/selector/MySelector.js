@@ -3,7 +3,7 @@ import { Button, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { Example } from './Example';
 import * as Films from './films';
-const FilmSelect = Select.ofType();
+
 export default class MySelector extends React.PureComponent {
   constructor() {
     super(...arguments);
@@ -18,7 +18,7 @@ export default class MySelector extends React.PureComponent {
       Example,
       { header: 'Select Dropdown' },
       React.createElement(
-        FilmSelect,
+        Select,
         {
           items: Films.TOP_100_FILMS,
           itemPredicate: Films.filterFilm,
