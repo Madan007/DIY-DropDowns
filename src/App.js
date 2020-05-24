@@ -11,7 +11,7 @@ const App = () => (
       searchprops={`width: 60px`}
     />
     <MyMultiSelector
-      tagprops={`color: white; background-color: #106ba3; font-size:12px`}
+      tagprops={`color: white; background-color: #660033; font-size:12px`}
       searchprops={`width: 200px`}
     />
   </div>
