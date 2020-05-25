@@ -1,10 +1,8 @@
 import React from 'react';
-import MySelector from './components/selector/MySelector';
 import MyMultiSelector from './components/multiSelectors/MyMultiSelector';
 
 const App = () => (
   <div>
-    <MySelector />
     <MyMultiSelector
       menuitemsprops={`color: white; font-size: 20px; background-color: black; width: 350px`}
       tagprops={`color: white; background-color: black; font-size:10px`}

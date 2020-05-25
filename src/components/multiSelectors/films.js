@@ -106,7 +106,9 @@ export const TOP_100_FILMS = [
   { title: 'Snatch', year: 2000 },
   { title: '3 Idiots', year: 2009 },
   { title: 'Monty Python and the Holy Grail', year: 1975 },
-].map((m, index) => Object.assign(Object.assign({}, m), { rank: index + 1 }));
+].map((movie, index) =>
+  Object.assign(Object.assign({}, movie), { rank: index + 1 })
+);
 
 export const renderFilm = (film, { handleClick, modifiers, query }) => {
   if (!modifiers.matchesPredicate) {

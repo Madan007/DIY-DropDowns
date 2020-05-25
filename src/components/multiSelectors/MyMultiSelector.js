@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Button, MenuItem } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 // import { Example } from '@blueprintjs/docs-theme';
 import Continer from './Container';
+import InputTagSelectWrapper from './InputTagSelectWrapper';
+import MenuItemWrapper from './MenuItemWrapper';
 import { MultiSelect } from '@blueprintjs/select';
-import styled from 'styled-components';
 import {
   areFilmsEqual,
   arrayContainsFilm,
@@ -12,7 +13,6 @@ import {
   maybeAddCreatedFilmToArrays,
   maybeDeleteCreatedFilmFromArrays,
   renderCreateFilmOption,
-  TOP_100_FILMS,
 } from './films';
 
 export default class MyMultiSelector extends React.PureComponent {
@@ -38,12 +38,9 @@ export default class MyMultiSelector extends React.PureComponent {
       if (!modifiers.matchesPredicate) {
         return null;
       }
-      const CustomizeMenuItem = styled(MenuItem)`
-        ${this.props.menuitemsprops || ''}
-      `;
 
       return (
-        <CustomizeMenuItem
+        <MenuItemWrapper
           active={modifiers.active}
           icon={this.isFilmSelected(film) ? 'tick' : 'blank'}
           key={film.rank}
@@ -51,7 +48,8 @@ export default class MyMultiSelector extends React.PureComponent {
           onClick={handleClick}
           text={`${film.rank}. ${film.title}`}
           shouldDismissPopover={false}
-        ></CustomizeMenuItem>
+          menuitemsprops={this.props.menuitemsprops}
+        ></MenuItemWrapper>
       );
     };
     this.handleTagRemove = (_tag, index) => {
@@ -137,29 +135,6 @@ export default class MyMultiSelector extends React.PureComponent {
   render() {
     let { allowCreate, films, popoverMinimal } = this.state;
 
-    const CustomizeMenuItem = styled(MenuItem)`
-      ${this.props.menuitemsprops || ''}
-    `;
-
-    const InputTagWrapper = styled.div`
-      .bp3-tag-input-values {
-        .bp3-tag {
-          ${this.props.tagprops || ''}
-        }
-        .bp3-input-ghost {
-          ${this.props.searchprops || ''}
-        }
-      }
-    `;
-
-    const initialContent = this.state.hasInitialContent ? (
-      <CustomizeMenuItem
-        disabled={true}
-        text={`${TOP_100_FILMS.length} items loaded.`}
-      >
-        })/>
-      </CustomizeMenuItem>
-    ) : undefined;
     const maybeCreateNewItemFromQuery = allowCreate ? createFilm : undefined;
     const maybeCreateNewItemRenderer = allowCreate
       ? renderCreateFilmOption
@@ -169,20 +144,24 @@ export default class MyMultiSelector extends React.PureComponent {
         <Button icon="cross" minimal={true} onClick={this.handleClear}></Button>
       ) : undefined;
     return (
-      <InputTagWrapper>
+      <InputTagSelectWrapper {...Object.assign({}, this.props)}>
         <Continer {...Object.assign({}, this.props)}>
           <MultiSelect
             {...Object.assign({}, filmSelectProps, {
               createNewItemFromQuery: maybeCreateNewItemFromQuery,
               createNewItemRenderer: maybeCreateNewItemRenderer,
-              initialContent,
+              initialContent: undefined,
               itemRenderer: this.renderFilm,
               itemsEqual: areFilmsEqual,
               // we may customize the default filmSelectProps.items by
               // adding newly created items to the list, so pass our own
               items: this.state.items,
               noResults: (
-                <CustomizeMenuItem disabled={true} text="No results." />
+                <MenuItemWrapper
+                  disabled={true}
+                  text="No results."
+                  menuitemsprops={this.props.menuitemsprops}
+                />
               ),
               onItemSelect: this.handleFilmSelect,
               onItemsPaste: this.handleFilmsPaste,
@@ -196,7 +175,7 @@ export default class MyMultiSelector extends React.PureComponent {
             })}
           />
         </Continer>
-      </InputTagWrapper>
+      </InputTagSelectWrapper>
     );
   }
 }
