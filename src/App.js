@@ -1,5 +1,5 @@
 import React from 'react';
-import MyMultiSelector from './components/multiSelectors';
+import MyMultiSelector from './components';
 
 const App = () => (
   <div>

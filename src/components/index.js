@@ -1,3 +1,3 @@
-import MyMultiSelector from './components/multiSelectors/MyMultiSelector';
+import MyMultiSelector from './multiSelectors/MyMultiSelector';
 
 export default MyMultiSelector;
