@@ -12,8 +12,8 @@
     "babel-plugin-transform-react-createelement-to-jsx": "^1.1.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "react-scripts": "1.1.1",
-    "react-scripts-ts": "^3.1.0",
+    "react-scripts": "5.0.1",
+    "react-scripts-ts": "^4.0.8",
     "react-transition-group": "^2.2.1",
     "styled-components": "^5.1.0",
     "typescript": "^3.9.3"
